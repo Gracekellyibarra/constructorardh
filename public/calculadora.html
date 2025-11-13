@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotizador Preliminar • RDH</title>
+    <link rel="stylesheet" href="styles.css"> 
+</head>
+<body class="bg-dark">
+    <header class="hdr">
+        <div class="wrap hdr__row">
+            <div class="hdr__brand">
+                <img src="img/logo_rhodes.png" class="logo" alt="RDH">
+            </div>
+            <nav class="hdr__nav">
+                <a href="index.html#catalogo">Proyectos</a>
+                <a href="index.html#nosotros">Nosotros</a>
+                <a href="calculadora.html" class="btn btn--primary">Cotizador</a>
+            </nav>
+            <a class="hdr__phone" href="https://wa.me/51922447700" target="_blank" rel="noopener">WhatsApp: 922447700</a>
+        </div>
+    </header>
+
+    <section id="cotizador" class="section">
+        <div class="wrap grid-2">
+            <div>
+                <h1 class="section__title" style="text-align: left;">Paso 1: Estima tu Inversión y Contáctanos</h1>
+                <p class="section__lead" style="text-align: left; margin-bottom: 30px;">
+                    Simulación de costos ajustada a la especialidad de obra. Los proyectos de **Montaje** e **Instalación Eléctrica** tienen una base de costo unitario más alta.
+                </p>
+
+                <form id="cotizacionForm" class="form">
+                    <h3>1. Dimensiones y Factores de Costo</h3>
+
+                    <label for="metrado">Metrado Estimado (m² de Construcción, Longitud en km, o Cantidad de Partida):</label>
+                    <input id="metrado" name="metrado" type="number" placeholder="Ej: 200 m² de construcción" value="100" required>
+                    
+                    <label for="tipoObra">Tipo de Servicio Principal (Ajusta la Partida Base / Rendimiento):</label>
+                    <select id="tipoObra" name="tipoObra">
+                        <option value="civil">Obra Civil y Cimentación (Base)</option>
+                        <option value="montaje">Montaje y Estructuras Metálicas (Especializado: Más Costoso)</option>
+                        <option value="electrica">Instalación Eléctrica / Telecomunicaciones (Muy Especializado: Más Costoso)</option>
+                        <option value="logistica">Servicio de Logística y Transporte (Menos Costoso)</option>
+                    </select>
+
+                    <label for="acabado">Nivel de Acabado (Afecta el **CU de Materiales**):</label>
+                    <select id="acabado" name="acabado">
+                        <option value="1.0">Básico (Funcional, Estándar)</option>
+                        <option value="1.5">Intermedio (Calidad Media, Buenos Materiales)</option>
+                        <option value="2.5">Alto (Premium, Diseños Especiales y Costosos)</option>
+                    </select>
+                    
+                    <label for="complejidadDiseno">Complejidad de Diseño/Ingeniería (Afecta el Costo de Planos y Supervisión):</label>
+                    <select id="complejidadDiseno" name="complejidadDiseno">
+                        <option value="1.0">Estándar (Planos Simples)</option>
+                        <option value="1.15">Moderada (Varias Especialidades)</option>
+                        <option value="1.3">Alta (Diseño Personalizado o Industrial)</option>
+                    </select>
+                    
+                    <label for="duracion">Prioridad / Tiempo Deseado (Afecta el **Rendimiento de Mano de Obra**):</label>
+                    <select id="duracion" name="duracion">
+                        <option value="1.0">Normal (Plazo sugerido por RDH)</option>
+                        <option value="1.2">Rápido (Exige más horas/mano de obra, reduce Rendimiento)</option>
+                        <option value="1.5">Urgente (Doble turno/Acelerado, Rendimiento muy bajo)</option>
+                    </select>
+                    
+                    <label for="necesitaEquipos">Necesidad de Equipos Pesados (Afecta el **CU de Equipos/Maquinaria**):</label>
+                    <select id="necesitaEquipos" name="necesitaEquipos">
+                        <option value="1.0">No / Uso Mínimo (Equipos Ligeros)</option>
+                        <option value="1.5">Sí, Uso Moderado (Ajusta el CU Equipo)</option>
+                        <option value="2.5">Sí, Uso Intensivo (Ajusta mucho el CU Equipo)</option>
+                    </select>
+
+                    <label for="ubicacion">Ubicación (Afecta la Logística y Costos de Transporte):</label>
+                    <select id="ubicacion" name="ubicacion">
+                        <option value="1.0">Lima Metropolitana y Callao</option>
+                        <option value="1.15">Capital de Provincia (Interior del País)</option>
+                        <option value="1.3">Zona Rural o de Difícil Acceso (Alto Costo de Logística)</option>
+                    </select>
+                    
+                    <hr style="border-color: #f59e0b50; margin: 20px 0;">
+
+                    <h3>2. Envía tu Solicitud y Agenda la Cita</h3>
+                    <input name="nombre" placeholder="Tu Nombre Completo" required>
+                    <input name="correo" type="email" placeholder="Correo Electrónico" required>
+                    <input name="telefono" type="tel" placeholder="Teléfono/WhatsApp" required>
+                    <textarea name="descripcion" rows="3" placeholder="Breve descripción del proyecto y horario de contacto preferido." required></textarea>
+
+                    
+                    <button class="btn btn--primary" type="submit">
+                        Calcular Estimación y Enviar Solicitud
+                    </button>
+                    <p class="msg ok" id="msgForm"></p>
+                </form>
+            </div>
+            
+            <aside>
+                <div class="card card--flat">
+                    <h3 style="margin-top: 0;">Análisis Detallado en costo basado en m2 (Solo Referencia Técnica)</h3>
+                    <p>CU Material Ajustado: <span id="cuMaterialSpan">S/ 0.00</span></p>
+                    <p>Costo CU Mano Obra: <span id="cuManoObraSpan">S/ 0.00</span></p>
+                    <p>Rendimiento Mano Obra Ajustado: <span id="rendimientoAjustadoSpan">0.00 unid/día</span></p>
+                    <p>Costo de Ingeniería/Diseño: <span id="costoDisenoSpan">S/ 0.00</span></p>
+                    <hr style="border-color: #334155; margin: 10px 0;">
+                    
+                    <h3 style="margin-top: 0;">Presupuesto Preliminar</h3>
+                    <p>Costo Directo Total (CD): <span id="costoDirectoSpan">S/ 0.00</span></p>
+                    <p>Gastos Generales (8% GG): <span id="ggSpan">S/ 0.00</span></p>
+                    <p>Utilidad (10%): <span id="utilidadSpan">S/ 0.00</span></p>
+                    <hr>
+                    <h3 style="color: var(--accent);">Costo Estimado Aproximado (Inc. IGV):</h3>
+                    <p style="font-size: 28px; font-weight: 900; margin: 0;">
+                        <span id="costoFinalSpan" style="color: var(--accent);">S/ 0.00</span>
+                    </p>
+                </div>
+            </aside>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="wrap">
+            © 2025 RDH • Construcción y Proyectos
+        </div>
+    </footer>
+
+    <script>
+        // === COSTOS BASE INTERNOS (AJUSTADOS AL MERCADO PERUANO 2025) ===
+        const BASES_ESPECIALIDAD = {
+            // CU_MAT (Costo Unitario Material), TARIFA_DIARIA (Costo de cuadrilla/día), RENDIMIENTO (m²/día), CU_EQ (Costo Unitario Equipo/Maquinaria)
+            civil: { CU_MAT: 1050.00, TARIFA_DIARIA: 4250.00, RENDIMIENTO: 5.00, CU_EQ: 100.00 },
+            montaje: { CU_MAT: 1200.00, TARIFA_DIARIA: 6000.00, RENDIMIENTO: 4.50, CU_EQ: 450.00 },
+            electrica: { CU_MAT: 1500.00, TARIFA_DIARIA: 6500.00, RENDIMIENTO: 5.00, CU_EQ: 250.00 },
+            logistica: { CU_MAT: 200.00, TARIFA_DIARIA: 2500.00, RENDIMIENTO: 8.00, CU_EQ: 50.00 }
+        };
+        
+        const PORC_DISENO_SUPERVISION = 0.03; // 3% del CD Base asignado a Diseño/Supervisión
+        
+        // === CONSTANTES DE LA EMPRESA (Costos Indirectos) ===
+        const GG_PERCENT = 0.08;      // 8% Gastos Generales
+        const UTILIDAD_PERCENT = 0.10; // 10% Utilidad
+        const IMPUESTO_PERCENT = 0.18; // 18% IGV 
+        const PORC_HERRAMIENTAS = 0.03; // 3% sobre Mano de Obra 
+        
+        // === FUNCIÓN DE CÁLCULO Y ENVÍO ===
+        document.getElementById('cotizacionForm').addEventListener('submit', async function(e) {
+            e.preventDefault(); 
+
+            // Reiniciar mensajes
+            document.getElementById('msgForm').hidden = true;
+            document.getElementById('msgForm').style.color = '#f59e0b'; 
+
+            // 1. Obtener valores y validación
+            const metrado = parseFloat(document.getElementById('metrado').value);
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            if (isNaN(metrado) || metrado <= 0) {
+                alert("Por favor, ingresa un valor válido y positivo para el Metrado.");
+                return;
+            }
+
+            // 2. Extracción de Factores para Cálculo
+            const tipoObra = data.tipoObra;
+            const acabadoFactor = parseFloat(data.acabado);
+            const complejidadDisenoFactor = parseFloat(data.complejidadDiseno);
+            const duracionFactor = parseFloat(data.duracion); 
+            const necesitaEquiposFactor = parseFloat(data.necesitaEquipos);
+            const ubicacionFactor = parseFloat(data.ubicacion);
+
+            const BASE = BASES_ESPECIALIDAD[tipoObra];
+            
+            // === CÁLCULO TÉCNICO ===
+            const rendimientoAJUSTADO = BASE.RENDIMIENTO / duracionFactor; 
+            const cuManoObra = BASE.TARIFA_DIARIA / rendimientoAJUSTADO;
+            const cuMaterialesAJUSTADO = BASE.CU_MAT * acabadoFactor;
+            const cuEquipo = BASE.CU_EQ * necesitaEquiposFactor; 
+            const cuHerramientas = cuManoObra * PORC_HERRAMIENTAS;
+            const cuDirecto = cuMaterialesAJUSTADO + cuManoObra + cuEquipo + cuHerramientas;
+            const costoDirectoBase = metrado * cuDirecto;
+            const costoDiseno = costoDirectoBase * PORC_DISENO_SUPERVISION * complejidadDisenoFactor;
+            const costoDirectoTotal = (costoDirectoBase + costoDiseno) * ubicacionFactor;
+            const gastosGenerales = costoDirectoTotal * GG_PERCENT;
+            const utilidad = costoDirectoTotal * UTILIDAD_PERCENT;
+            const subtotal = costoDirectoTotal + gastosGenerales + utilidad;
+            const costoFinal = subtotal * (1 + IMPUESTO_PERCENT);
+
+            // 3. Mostrar resultados (Actualización de la Vista)
+            const formatter = new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' });
+            
+            document.getElementById('cuMaterialSpan').textContent = formatter.format(cuMaterialesAJUSTADO);
+            document.getElementById('rendimientoAjustadoSpan').textContent = `${rendimientoAJUSTADO.toFixed(2)} unid/día`;
+            document.getElementById('cuManoObraSpan').textContent = formatter.format(cuManoObra);
+            document.getElementById('costoDisenoSpan').textContent = formatter.format(costoDiseno);
+            document.getElementById('costoDirectoSpan').textContent = formatter.format(costoDirectoTotal);
+            document.getElementById('ggSpan').textContent = formatter.format(gastosGenerales);
+            document.getElementById('utilidadSpan').textContent = formatter.format(utilidad);
+            document.getElementById('costoFinalSpan').textContent = formatter.format(costoFinal);
+            
+            // 4. Preparar JSON de ENVÍO (Datos que se guardan en BD)
+            const parametrosResumen = {
+                metrado, tipoObra, acabadoFactor, complejidadDisenoFactor,
+                duracionFactor, necesitaEquiposFactor, ubicacionFactor,
+                costo_directo_total: costoDirectoTotal.toFixed(2) 
+            };
+
+            const datosEnvio = {
+                // Datos de contacto
+                nombre: data.nombre,
+                correo: data.correo,
+                telefono: data.telefono,
+                descripcion: data.descripcion,
+                // Datos de cotización para BD
+                costo_estimado: costoFinal.toFixed(2),
+                parametros_resumen: JSON.stringify(parametrosResumen) 
+            };
+
+            // 5. ENVÍO AL SERVIDOR (A la ruta de tu Backend Express)
+            try {
+                // *** RUTA CORRECTA: http://localhost:3001/api/solicitudes ***
+                const response = await fetch('http://localhost:3001/api/solicitudes', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(datosEnvio)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('msgForm').textContent = result.mensaje;
+                    document.getElementById('msgForm').hidden = false;
+                    document.getElementById('msgForm').style.color = '#22c55e'; // Éxito
+                    e.target.reset(); // Limpia el formulario
+                } else {
+                    document.getElementById('msgForm').textContent = 'Error al registrar: ' + result.mensaje;
+                    document.getElementById('msgForm').hidden = false;
+                    document.getElementById('msgForm').style.color = '#f87171'; // Error
+                }
+            } catch (error) {
+                document.getElementById('msgForm').textContent = 'Error de conexión. Asegúrese que el Backend (puerto 3001) esté corriendo.';
+                document.getElementById('msgForm').hidden = false;
+                document.getElementById('msgForm').style.color = '#f87171';
+                console.error('Error de fetch:', error);
+            }
+        });
+    </script>
+</body>
+</html>
